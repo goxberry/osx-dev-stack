@@ -6,10 +6,7 @@ The goal of this project is to create an auto-installation procedure that starts
 
 The general idea to start out with is to assume there's next to nothing on the machine. Dependencies are:
 
-1. OS X Lion (10.7.4 or later) or OS X Mountain Lion
-
-so by default, users should have:
-
+1. OS X Lion (10.7.4 or later) or OS X Mountain Lion, so by default, users should have:
 2. bash
 3. curl
 4. Ruby 1.8.7
