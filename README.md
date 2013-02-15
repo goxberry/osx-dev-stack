@@ -8,9 +8,9 @@ The general idea to start out with is to assume there's next to nothing on the m
 
 1. OS X Lion (10.7.4 or later) or OS X Mountain Lion, so by default, users should have:
 2. bash
-3. curl
-4. Ruby 1.8.7
-5. RubyGems (specific version doesn't matter)
+3. [curl](http://curl.haxx.se/download.html)
+4. [Ruby](http://www.ruby-lang.org/en/downloads/) 1.8.7
+5. [RubyGems](https://rubygems.org/pages/download) (specific version doesn't matter)
 
 So, in other words, users have next to nothing for development (not even a C compiler, possibly not X11).
 
@@ -20,23 +20,23 @@ I work on a number of different computers. I have two Mac laptops at home, and a
 
 The general design of this project is inspired by [ControlTier's white paper on fully automated system provisioning](http://blog.controltier.com/2009/04/new-whitepaper-achieving-fully.html). To summarize, they suggest three layers of automation:
 
-1. OS Install/Cloud or VM Image Launch (this project uses a bash script).
-2. System Configuration (this project uses Puppet)
-3. Application Service Deployment (this project uses Fabric) 
+1. OS Install/Cloud or VM Image Launch (this project uses a bash script for this step).
+2. System Configuration (this project uses [Puppet](https://puppetlabs.com/puppet/puppet-open-source/) for this step)
+3. Application Service Deployment (this project uses [Fabric](https://puppetlabs.com/puppet/puppet-open-source/) for this step)
 
-In addition, each of these layers should be unit tested. Bash scripts will be unit tested with shunit2; Puppet scripts will be unit tested using rake and rspec-puppet; and Fabric scripts will be unit tested with Nose.
+In addition, each of these layers should be unit tested. Bash scripts will be unit tested with [shunit2](https://code.google.com/p/shunit2/); Puppet scripts will be unit tested using [rake](http://rake.rubyforge.org/) and [rspec-puppet](http://rspec-puppet.com/); and Fabric scripts will be unit tested with [Nose](http://readthedocs.org/docs/nose/).
 
 ## "OS Install"
 
 The VM Image Launch section doesn't apply, and I don't need the OS Install part; I usually end up doing that myself, or at work, I'm given a machine with the OS installed. In fact, at work, I'm not even allowed to install the OS, so I wanted that part to be separate. OS installation is turnkey anyway.
 
-I will, however, need to install compilers and the X11 libraries on OS X in order to do any sort of system configuration. Consequently, I'll be using a `bash` script to bootstrap the system configuration process by downloading and installing compilers, libraries, and the system configuration tools. Furthermore, any open-source Mac apps will be installed using bash, because there's no good way to automate the install and uninstall processes.
+I will, however, need to [install the XCode command line tools (note: link requires Apple ID)](https://developer.apple.com/downloads/index.action) and the [X11 libraries on OS X](https://xquartz.macosforge.org/trac/wiki/Releases) in order to do any sort of system configuration. Consequently, I'll be using a `bash` script to bootstrap the system configuration process by downloading and installing compilers, libraries, and the system configuration tools. Furthermore, any open-source Mac apps will be installed using bash, because there's no good way to automate the install and uninstall processes.
 
 ## System Configuration
 
-I'm interpreting "system configuration" in this setting to be "anything that isn't a Python, Ruby, or Perl package". I use each of these dynamic languages for development, in order of decreasing frequency. Crucially, each of these languages has a package manager. Anything that has its own package manager needs minimal configuration at this level. I've used Puppet in the past (in conjunction with Vagrant) for building virtual machines because Puppet has a large community associated with it and a number of famous enterprise users (including VMWare now). Due to that familiarity, and my satisfaction with it so far, I decided to use Puppet for this layer of the installation process.
+I'm interpreting "system configuration" in this setting to be "anything that isn't a Python, Ruby, or Perl package". I use each of these dynamic languages for development, in order of decreasing frequency. Crucially, each of these languages has a package manager. Anything that has its own package manager needs minimal configuration at this level. I've used Puppet in the past (in conjunction with [Vagrant](http://www.vagrantup.com/) and [VirtualBox](https://www.virtualbox.org/wiki/Downloads)) for building virtual machines because Puppet has a large community associated with it and a number of famous enterprise users (including VMWare now). Due to that familiarity, and my satisfaction with it so far, I decided to use Puppet for this layer of the installation process.
 
-Puppet works best when it can interface with a package manager. There are a number of package managers out there for Macs: MacPorts, Homebrew, Fink, Rudix, and others. While I've favored MacPorts in the past, I don't like their development philosophy (centralized), or their choice of language (Tcl). I have used MacPorts in the past and I've been pleased with the results. I originally used them because I've heard their packages required fewer fixes after OS upgrades. If I were just a consumer of the packaging system, I wouldn't care so much about development language or philosophy, but in my case, I'm going to have to write my own packages in order to automate the build process, and if I have to learn Tcl to do that, then get blessed by their development team, it's not worth it because it requires too much of a time investment for the return. Homebrew uses Ruby as its development language, which I already use for Puppet anyway, and I'm in the process of learning Jekyll, plus the Homebrew project has a decentralized development structure. There are also Homebrew providers for Puppet, so Homebrew will work well as a package manager for this project. If I didn't need to roll my own packages, MacPorts would work just fine. The main criticism of Homebrew is that it relies heavily on system libraries, and as a result, its packages may break on an OS upgrade, but this project is designed to recover from that scenario anyway; I'd also argue that reliance on system libraries is otherwise a strength because it means less duplication and less storage. I use MacPorts now, and I've already noticed that I inadvertently installed over my system Perl with the MacPorts Perl. I'd like to avoid that as much as possible.
+Puppet works best when it can interface with a package manager. There are a number of package managers out there for Macs: MacPorts, Homebrew, Fink, Rudix, and others. While I've favored MacPorts in the past, I don't like their development philosophy (centralized), or their choice of language (Tcl). I have used MacPorts in the past and I've been pleased with the results. I originally used them because I've heard their packages required fewer fixes after OS upgrades. If I were just a consumer of the packaging system, I wouldn't care so much about development language or philosophy, but in my case, I'm going to have to write my own packages in order to automate the build process, and if I have to learn Tcl to do that, then get blessed by their development team, it's not worth it because it requires too much of a time investment for the return. [Homebrew](https://github.com/mxcl/homebrew) uses Ruby as its development language, which I already use for Puppet anyway, and I'm in the process of learning Jekyll, plus the [Homebrew project has a decentralized development structure](http://braumeister.org/). There are also [Homebrew providers for Puppet](https://github.com/jedi4ever/puppet-homebrew), so Homebrew will work well as a package manager for this project. If I didn't need to roll my own packages, MacPorts would work just fine. The main criticism of Homebrew is that it relies heavily on system libraries, and as a result, its packages may break on an OS upgrade, but this project is designed to recover from that scenario anyway; I'd also argue that reliance on system libraries is otherwise a strength because it means less duplication and less storage. I use MacPorts now, and I've already noticed that I inadvertently installed over my system Perl with the MacPorts Perl. I'd like to avoid that as much as possible.
 
 ## "Application service deployment" = Sandboxing Python, Ruby, and Perl installations
 
