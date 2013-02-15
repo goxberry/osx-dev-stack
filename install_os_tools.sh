@@ -11,7 +11,8 @@ check_curl() {
     (which curl > /dev/null) && echo 'Curl exists!' || { \
         echo 'Curl does not exist!'; \
         echo 'Download Curl!'; \
-        echo 'http://curl.haxx.se/download.html'; }
+        echo 'http://curl.haxx.se/download.html'; \
+        exit 1; }
 }
 
 # Function that finds and returns Mac OS X system version
@@ -25,6 +26,36 @@ find_osx_maj_vers() {
 }
 
 # Function that finds and returns URL for Xcode compiler tools
+get_compiler_tools_url() {
+    # Store OS X version and major version
+    local OSX_VERS="$(find_osx_vers)"
+    local OSX_MAJ_VERS="$(find_osx_maj_vers)"
+
+    # First, separate out by major version:
+    # URLs are from my Google Drive, to skirt Apple's login requirement
+    case "${OSX_MAJ_VERS}" in
+        "10.7") # 10.7.x, aka "Lion"
+            # Then test for minor version here to satisfy version >= 10.7.4
+            if [[ "${OSX_VERS}" > "10.7.4" || "${OSX_VERS}" == "10.7.4" ]]
+            then
+                echo 'https://docs.google.com/file/d/0B_ehEoEjfVy5akh4OV9IS0Rjb1E/edit?usp=sharing'
+            else
+                echo 'Must upgrade version of OS X to 10.7.4 or later!'
+                echo 'To upgrade, use "sudo softwareupdate --install --all"'
+                exit 1
+            fi
+            ;;
+        "10.8") # 10.8.x, aka "Mountain Lion"
+            echo 'https://docs.google.com/file/d/0B_ehEoEjfVy5Y1gtUWpXd1BLU1U/edit?usp=sharing'
+            ;;
+        *     ) # All other cases
+            echo 'Must upgrade version of OS X to 10.7.4 or later!'
+            echo 'To upgrade, use "sudo softwareupdate --install --all"'
+            exit 1
+            ;;
+    esac
+
+}
 
 # Function that downloads and installs Xcode compiler tools
 

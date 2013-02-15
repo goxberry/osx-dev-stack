@@ -16,6 +16,11 @@ test_find_osx_maj_vers() {
     assertEquals 'Version is supposed to be 10.7!' '10.7' "$(find_osx_maj_vers)"
 }
 
+# Test getting URL
+test_compiler_tools_url() {
+    assertEquals 'Did not get correct URL!' 'https://docs.google.com/file/d/0B_ehEoEjfVy5akh4OV9IS0Rjb1E/edit?usp=sharing' "$(get_compiler_tools_url)"
+}
+
 # Load the install_os_tools.sh script
 oneTimeSetUp() {
     . ./install_os_tools.sh
