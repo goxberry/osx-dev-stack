@@ -1,0 +1,78 @@
+### .gitignore file that tells Git what files to ignore for commits
+
+### Operating system ignores
+## OS X ignores, from 
+## https://github.com/github/gitignore/Global/OSX.gitignore 
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon
+
+# Thumbnails
+._*
+
+# Files that might appear on external disk
+.Spotlight-V100
+.Trashes
+
+### End operating system ignores
+
+### Text editor ignores
+
+## Emacs ignores, from
+## https://github.com/github/gitignore/Global/Emacs.gitignore
+*~
+\#*\#
+/.emacs.desktop
+/.emacs.desktop.lock
+.elc
+auto-save-list
+tramp
+.\#*
+
+# Org-mode
+.org-id-locations
+*_archive
+## End Emacs ignores
+
+## Vim ignores, for my friends who use Vim, from
+## https://github.com/github/gitignore/Global/vim.gitignore
+.*.s[a-w][a-z]
+*.un~
+Session.vim
+.netrwhist
+*~
+
+## Sublime Text 2 ignores, for my friends who use it, from
+## https://github.com/github/gitignore/Global/SublimeText.gitignore
+# SublimeText project files
+*.sublime-workspace
+
+## Textmate ignores, for my friends who use it, from
+## https://github.com/github/gitignore/Global/TextMate.gitignore
+*.tmproj
+*.tmproject
+tmtags
+
+### End text editor ignores
+
+### VCS ignores
+
+## Mercurial ignores, for my friends who use Mercurial, from
+## https://github.com/github/gitignore/Global/Mercurial.gitignore
+/.hg/*
+*/.hg/*
+.hgignore
+
+## SVN ignores, for my friends who use SVN, from
+## https://github.com/github/gitignore/Global/SVN.gitignore
+.svn/
+
+## CVS ignores, from
+## https://github.com/github/gitignore/Global/CVS.gitignore
+/CVS/*
+*/CVS/*
+.cvsignore
+*/.cvsignore
+
+### End VCS ignores
