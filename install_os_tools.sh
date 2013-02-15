@@ -7,7 +7,7 @@ set -eu
 
 # Function checking for cURL; if it doesn't exist, exit & output
 # location of website containing cURL binary for installation.
-check_curl() {
+function check_curl() {
     (which curl > /dev/null) && echo 'Curl exists!' || { \
         echo 'Curl does not exist!'; \
         echo 'Download Curl!'; \
@@ -16,17 +16,17 @@ check_curl() {
 }
 
 # Function that finds and returns Mac OS X system version
-find_osx_vers() {
+function find_osx_vers() {
     echo `sw_vers | grep ProductVersion | cut -f2`
 }
 
 # Function that finds and reutnrs Mac OS X system major version (i.e., 10.x)
-find_osx_maj_vers() {
+function find_osx_maj_vers() {
     echo `sw_vers | grep ProductVersion | cut -f2 | cut -d '.' -f1-2`
 }
 
 # Function that finds and returns URL for Xcode compiler tools
-get_compiler_tools_url() {
+function get_compiler_tools_url() {
     # Store OS X version and major version
     local OSX_VERS="$(find_osx_vers)"
     local OSX_MAJ_VERS="$(find_osx_maj_vers)"
