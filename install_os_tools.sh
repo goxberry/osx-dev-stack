@@ -19,6 +19,11 @@ find_osx_vers() {
     echo `sw_vers | grep ProductVersion | cut -f2`
 }
 
+# Function that finds and reutnrs Mac OS X system major version (i.e., 10.x)
+find_osx_maj_vers() {
+    echo `sw_vers | grep ProductVersion | cut -f2 | cut -d '.' -f1-2`
+}
+
 # Function that finds and returns URL for Xcode compiler tools
 
 # Function that downloads and installs Xcode compiler tools

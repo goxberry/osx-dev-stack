@@ -7,8 +7,13 @@ test_check_curl() {
 }
 
 # Test finding OS X version
-test_find_osx_version() {
+test_find_osx_vers() {
     assertEquals 'Version is supposed to be 10.7.5!' '10.7.5' "$(find_osx_vers)"
+}
+
+# Test finding OS X major version
+test_find_osx_maj_vers() {
+    assertEquals 'Version is supposed to be 10.7!' '10.7' "$(find_osx_maj_vers)"
 }
 
 # Load the install_os_tools.sh script
