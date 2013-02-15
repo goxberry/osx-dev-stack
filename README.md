@@ -20,13 +20,17 @@ I work on a number of different computers. I have two Mac laptops at home, and a
 
 The general design of this project is inspired by [ControlTier's white paper on fully automated system provisioning](http://blog.controltier.com/2009/04/new-whitepaper-achieving-fully.html). To summarize, they suggest three layers of automation:
 
-1. OS Install/Cloud or VM Image Launch
-2. System Configuration
-3. Application Service Deployment
+1. OS Install/Cloud or VM Image Launch (this project uses a bash script).
+2. System Configuration (this project uses Puppet)
+3. Application Service Deployment (this project uses Fabric) 
+
+In addition, each of these layers should be unit tested. Bash scripts will be unit tested with shunit2; Puppet scripts will be unit tested using rake and rspec-puppet; and Fabric scripts will be unit tested with Nose.
 
 ## "OS Install"
 
-I don't need the OS Install part; I usually end up doing that myself, or at work, I'm given a machine with the OS installed. In fact, at work, I'm not even allowed to install the OS, so I wanted that part to be separate. OS installation is turnkey anyway. I will, however, need to install compilers and the X11 libraries on OS X in order to do any sort of system configuration. Consequently, I'll be using a bash script to bootstrap the system configuration process by downloading and installing compilers, libraries, and the system configuration tools. Furthermore, any open-source Mac apps will be installed using bash, because there's no good way to automate the install and uninstall processes.
+The VM Image Launch section doesn't apply, and I don't need the OS Install part; I usually end up doing that myself, or at work, I'm given a machine with the OS installed. In fact, at work, I'm not even allowed to install the OS, so I wanted that part to be separate. OS installation is turnkey anyway.
+
+I will, however, need to install compilers and the X11 libraries on OS X in order to do any sort of system configuration. Consequently, I'll be using a `bash` script to bootstrap the system configuration process by downloading and installing compilers, libraries, and the system configuration tools. Furthermore, any open-source Mac apps will be installed using bash, because there's no good way to automate the install and uninstall processes.
 
 ## System Configuration
 
