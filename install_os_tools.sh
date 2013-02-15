@@ -1,4 +1,5 @@
 #!/bin/bash
+set -eu
 
 # This shell script carries out the "install OS" layer of provisioning by
 # installing base tools needed to carry out the subsequent steps of system
@@ -6,8 +7,13 @@
 
 # Function checking for cURL; if it doesn't exist, exit & output
 # location of website containing cURL binary for installation.
-
-
+check_curl() {
+# Purpose: Check to see if curl exists on system.
+    (which curl > /dev/null) && echo 'Curl exists!' || { \
+        echo 'Curl does not exist!'; \
+        echo 'Download Curl!'; \
+        echo 'http://curl.haxx.se/download.html'; }
+}
 
 # Function that finds and returns Mac OS X system version
 
@@ -46,4 +52,3 @@
 # installed via dmg, pkg, or mpkg.
 
 # Add system customization steps here?
-
