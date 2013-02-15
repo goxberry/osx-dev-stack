@@ -8,7 +8,6 @@ set -eu
 # Function checking for cURL; if it doesn't exist, exit & output
 # location of website containing cURL binary for installation.
 check_curl() {
-# Purpose: Check to see if curl exists on system.
     (which curl > /dev/null) && echo 'Curl exists!' || { \
         echo 'Curl does not exist!'; \
         echo 'Download Curl!'; \
@@ -16,6 +15,9 @@ check_curl() {
 }
 
 # Function that finds and returns Mac OS X system version
+find_osx_vers() {
+    echo `sw_vers | grep ProductVersion | cut -f2`
+}
 
 # Function that finds and returns URL for Xcode compiler tools
 
