@@ -31,6 +31,10 @@ get_compiler_tools_url() {
     local OSX_VERS="$(find_osx_vers)"
     local OSX_MAJ_VERS="$(find_osx_maj_vers)"
 
+    # Package URLs
+    local LION_URL='https://docs.google.com/file/d/0B_ehEoEjfVy5akh4OV9IS0Rjb1E/edit?usp=sharing'
+    local MTN_LION_URL='https://docs.google.com/file/d/0B_ehEoEjfVy5Y1gtUWpXd1BLU1U/edit?usp=sharing'
+
     # First, separate out by major version:
     # URLs are from my Google Drive, to skirt Apple's login requirement
     case "${OSX_MAJ_VERS}" in
@@ -38,7 +42,7 @@ get_compiler_tools_url() {
             # Then test for minor version here to satisfy version >= 10.7.4
             if [[ "${OSX_VERS}" > "10.7.4" || "${OSX_VERS}" == "10.7.4" ]]
             then
-                echo 'https://docs.google.com/file/d/0B_ehEoEjfVy5akh4OV9IS0Rjb1E/edit?usp=sharing'
+                echo "${LION_URL}"
             else
                 echo 'Must upgrade version of OS X to 10.7.4 or later!'
                 echo 'To upgrade, use "sudo softwareupdate --install --all"'
@@ -46,7 +50,7 @@ get_compiler_tools_url() {
             fi
             ;;
         "10.8") # 10.8.x, aka "Mountain Lion"
-            echo 'https://docs.google.com/file/d/0B_ehEoEjfVy5Y1gtUWpXd1BLU1U/edit?usp=sharing'
+            echo "${MTN_LION_URL}"
             ;;
         *     ) # All other cases
             echo 'Must upgrade version of OS X to 10.7.4 or later!'
