@@ -18,7 +18,17 @@ test_find_osx_maj_vers() {
 
 # Test getting URL
 test_compiler_tools_url() {
-    assertEquals 'Did not get correct URL!' 'https://docs.google.com/file/d/0B_ehEoEjfVy5akh4OV9IS0Rjb1E/edit?usp=sharing' "$(get_compiler_tools_url)"
+    assertEquals 'Did not get correct URL!' 'https://github.com/goxberry/xcode-cli-tools/blob/master/xcode_cli_tools_10_7_4_Jan_2013.dmg' "$(get_compiler_tools_url)"
+}
+
+# Test the generation of the compiler tools file name
+test_get_compiler_tools_filename() {
+    assertEquals 'Did not generate name correctly!' 'Command Line Tools (Lion)' "$(get_compiler_tools_filename)"
+}
+
+# Dry run test of commands used in installing compiler tools
+test_install_compiler_tools() {
+    echo "$(install_compiler_tools)"
 }
 
 # Load the install_os_tools.sh script

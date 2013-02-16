@@ -18,11 +18,13 @@ function check_curl() {
 # Function that finds and returns Mac OS X system version
 function find_osx_vers() {
     echo `sw_vers | grep ProductVersion | cut -f2`
+    #TODO(goxberry@gmail.com): Add error handling here.
 }
 
 # Function that finds and reutnrs Mac OS X system major version (i.e., 10.x)
 function find_osx_maj_vers() {
     echo `sw_vers | grep ProductVersion | cut -f2 | cut -d '.' -f1-2`
+    #TODO(goxberry@gmail.com): Add error handling here.
 }
 
 # Function that finds and returns URL for Xcode compiler tools
@@ -32,8 +34,8 @@ function get_compiler_tools_url() {
     local OSX_MAJ_VERS="$(find_osx_maj_vers)"
 
     # Package URLs
-    local LION_URL='https://docs.google.com/file/d/0B_ehEoEjfVy5akh4OV9IS0Rjb1E/edit?usp=sharing'
-    local MTN_LION_URL='https://docs.google.com/file/d/0B_ehEoEjfVy5Y1gtUWpXd1BLU1U/edit?usp=sharing'
+    local LION_URL='https://github.com/goxberry/xcode-cli-tools/blob/master/xcode_cli_tools_10_7_4_Jan_2013.dmg'
+    local MTN_LION_URL='https://github.com/goxberry/xcode-cli-tools/blob/master/xcode_cli_tools_10_8_Jan_2013.dmg'
 
     # First, separate out by major version:
     # URLs are from my Google Drive, to skirt Apple's login requirement
@@ -61,7 +63,60 @@ function get_compiler_tools_url() {
 
 }
 
+# Gets file name of compiler tools
+function get_compiler_tools_filename() {
+    local TOOLS_BASENAME='Command Line Tools '
+    local OSX_MAJ_VERS="$(find_osx_maj_vers)"
+    case "${OSX_MAJ_VERS}" in
+        "10.7")
+            local TOOLS_SUFFIX='(Lion)' ;;
+        "10.8")
+            local TOOLS_SUFFIX='(Mountain Lion)' ;;
+    esac
+    local TOOLS_FULLNAME=${TOOLS_BASENAME}${TOOLS_SUFFIX}
+    echo "${TOOLS_FULLNAME}"
+}
+
 # Function that downloads and installs Xcode compiler tools
+function install_compiler_tools() {
+    local TOOLS_URL="$(get_compiler_tools_url)"
+
+    # Process file names
+    local TOOLS_FULLNAME="$(get_compiler_tools_filename)"
+    local TOOLS_VOL='/Volumes/'${TOOLS_FULLNAME}
+    local TOOLS_PKG=${TOOLS_VOL}${TOOLS_FULLNAME}'.mpkg'
+    local TOOLS_FILE=${TOOLS_FULLNAME}'.dmg'
+
+    # Download compiler tools
+    echo 'Downloading '${TOOLS_FULLNAME}'...'
+    curl -k -L -f -o "${TOOLS_FILE}" "${TOOLS_URL}" || { \
+        echo 'Download of compiler tools failed!'; \
+        exit 1; }
+
+    # Mount the dmg, install the package, unmount the dmg (in subshell)
+    echo 'Mounting '${TOOLS_FULLNAME}' volume...'
+    hdiutil mount "${TOOLS_FILE}" || { \
+        echo 'Mounting ${TOOLS_FILE} failed!'; \
+        exit 1; }
+
+    #echo 'Installing '${TOOLS_FULLNAME}' ...'
+    #sudo installer --package "${TOOLS_PKG}" --target / || { \
+    #    echo 'Installing ${TOOLS_PKG} failed!' ; \
+    #    exit 1; }
+
+    echo 'Unmounting '${TOOLS_FULLNAME}' volume...'
+    (cd "${TOOLS_VOL}"; hdiutil unmount "${TOOLS_VOL}") || { \
+        echo 'Unmounting ${TOOLS_VOL} failed!' ; \
+        exit 1; }
+
+    # Clean up by deleting downloaded file
+    if [ -e "${TOOLS_FILE}" ]
+        then
+        rm -f "${TOOLS_FILE}"
+        else
+        : # Do nothing
+    fi
+}
 
 # Function that checks for Ruby; if it doesn't exist, download &
 # install
